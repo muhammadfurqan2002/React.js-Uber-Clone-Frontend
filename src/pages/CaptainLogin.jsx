@@ -1,18 +1,31 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
+import { BASE_URL } from "./UserLogin";
 
 const CaptainLogin = () => {
   // That's two way binding
+  const {  setCaptain } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [CaptainData, setCaptainData] = useState({});
-  const SubmitHandler = (e) => {
+  // const [CaptainData, setCaptainData] = useState({});
+
+  const SubmitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
+    const newCaptain = {
       email: email,
       password: password,
-    });
-    console.log(CaptainData);
+    };
+    const res = await axios.post(`${BASE_URL}/captains/login`, newCaptain);
+    if (res.status === 200) {
+      const data = res.data;
+      setCaptain(data.captain);
+      localStorage.setItem("token", data.token);
+      navigate("/captain-home");
+    }
+
     setEmail("");
     setPassword("");
   };
@@ -56,7 +69,10 @@ const CaptainLogin = () => {
         </form>
       </div>
       <div>
-        <Link to={"/login"} className="bg-[#d5622d] flex items-center justify-center mb-5 text-white font-semibold rounded mb-7 px-4 py-2  w-full text-lg ">
+        <Link
+          to={"/login"}
+          className="bg-[#d5622d] flex items-center justify-center mb-5 text-white font-semibold rounded mb-7 px-4 py-2  w-full text-lg "
+        >
           Sign in as User
         </Link>
       </div>
