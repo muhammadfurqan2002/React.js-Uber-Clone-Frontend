@@ -43,7 +43,8 @@ const CaptainSignup = () => {
     const res=await axios.post(`${BASE_URL}/captains/register`,newCaptain)
     
     if(res.status===201){
-      const data=res.data;
+      const data=res.data;console.log(data);
+
       setCaptain(data.captain)
       localStorage.setItem("token",data.token);
       navigate("/captain-home")

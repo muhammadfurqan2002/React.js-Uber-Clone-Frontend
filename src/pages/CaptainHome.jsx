@@ -2,7 +2,7 @@
 const CaptainHome = () => {
   return (
     <div>
-      
+      hi
     </div>
   )
 }
